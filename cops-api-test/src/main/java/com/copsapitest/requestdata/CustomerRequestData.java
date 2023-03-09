@@ -16,15 +16,12 @@ public class CustomerRequestData {
     @Description("add customer request body data")
     public Map<String, Object> addCustomer() {
         log.info("CustomerRequestData::addCustomer");
-        int customerId = faker.number().numberBetween(1, 100);
-        log.info("Customer ID Generated: " + customerId);
-
         Map<String, Object> requestBody = new HashMap();
-        requestBody.put("customerId", faker.number().numberBetween(1, 100));
+        requestBody.put("customerId", faker.code().asin());
         requestBody.put("customerName", String.format("Automation %s", faker.name().fullName()));
         requestBody.put("contactName", faker.name().firstName());
         requestBody.put("address", faker.address().fullAddress());
-        requestBody.put("city", faker.code().asin());
+        requestBody.put("city", "Automation City");
         requestBody.put("postalCode", String.valueOf(faker.number().randomNumber(5, true)));
         requestBody.put("country", faker.country().name());
 

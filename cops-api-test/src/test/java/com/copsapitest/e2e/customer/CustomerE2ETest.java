@@ -1,19 +1,26 @@
 package com.copsapitest.e2e.customer;
 
 import com.copsapitest.constants.CopsConstants;
+import com.copsapitest.dto.CustomerDto;
 import com.copsapitest.enumeration.CopsEnum;
-import com.copsapitest.service.http.CopsHttpService;
-import com.copsapitest.service.webclient.CopsWebClientService;
+import com.copsapitest.rest.CopsRestAssuredService;
 import com.copsapitest.requestdata.CustomerRequestData;
 import com.copsapitest.util.ServiceUtil;
-import com.copsapitest.validators.CommonApiValidator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Description;
+import org.springframework.http.HttpStatus;
 
+import java.util.List;
 import java.util.Map;
+
+import static io.restassured.RestAssured.given;
 
 @Slf4j
 public class CustomerE2ETest {
@@ -31,9 +38,8 @@ public class CustomerE2ETest {
     @BeforeEach
     public void setup() {
         log.info("CustomerE2ETest::setup");
-        CustomerRequestData customerUtil = new CustomerRequestData();
-        customerRequestMap = customerUtil.addCustomer();
-        //customerRequestBody = ServiceUtil.convertPojoToJson(customerRequestMap);
+        customerRequestMap = new CustomerRequestData().addCustomer();
+        customerRequestBody = ServiceUtil.convertPojoToJson(customerRequestMap);
     }
 
     @AfterEach
@@ -41,19 +47,37 @@ public class CustomerE2ETest {
         log.info("CustomerE2ETest::tearDown");
     }
 
+//    @Test
+//    @Description("test e2e customer api")
+//    public void testCustomerE2EService() {
+//        log.info("CustomerE2ETest::testCustomerE2EService");
+//        Map<String, Object> postResponseMap = new CopsWebClientService().callWebClientPostService("CUSTOMER_POST_API", CUSTOMER_POST_ENDPOINT, customerRequestMap);
+//        CommonApiValidator.validateStatusCode(TEST_DESCRIPTION, postResponseMap);
+//
+//        Map<String, Object> getResponseMap = new CopsHttpService().callHttpGetService("CUSTOMER_GET_API", CUSTOMER_GET_ENDPOINT);
+//        CommonApiValidator.validateStatusCode(TEST_DESCRIPTION, postResponseMap);
+//        Map<String, Object> getFlattenResponseMap = ServiceUtil.flattenJson(getResponseMap);
+//
+//        System.out.println();
+//    }
+
     @Test
     @Description("test e2e customer api")
-    public void testCustomerE2EService() {
-        log.info("CustomerE2ETest::testCustomerE2EService");
-        CopsWebClientService copsWebClientService = new CopsWebClientService();
-        Map<String, Object> postResponseMap = copsWebClientService.callWebClientPostService("CUSTOMER_POST_API", CUSTOMER_POST_ENDPOINT, customerRequestMap);
-        CommonApiValidator.validateStatusCode(TEST_DESCRIPTION, postResponseMap);
+    public void testCustomerE2EService() throws JsonProcessingException {
+        Response postCustomerResponse = new CopsRestAssuredService().callRestAssuredPostService(CUSTOMER_POST_ENDPOINT, customerRequestBody);
+        Assertions.assertEquals(HttpStatus.OK.value(), postCustomerResponse.getStatusCode(), String.format("Status code do not match for %s", CUSTOMER_POST_ENDPOINT));
 
-        CopsHttpService copsHttpService = new CopsHttpService();
-        Map<String, Object> getResponseMap = copsHttpService.callHttpGetService("CUSTOMER_GET_API", CUSTOMER_GET_ENDPOINT);
-        CommonApiValidator.validateStatusCode(TEST_DESCRIPTION, postResponseMap);
-        Map<String, Object> getFlattenResponseMap = ServiceUtil.flattenJson(getResponseMap);
+        Response getCustomerResponse = new CopsRestAssuredService().callRestAssuredGetService(CUSTOMER_GET_ENDPOINT);
+        Assertions.assertEquals(HttpStatus.OK.value(), getCustomerResponse.getStatusCode(), String.format("Status code do not match for %s", CUSTOMER_GET_ENDPOINT));
+        //Map<String, Object> getCustomerFlattenResponseMap = ServiceUtil.flattenJson(getCustomerResponse.getBody().asString());
 
-        System.out.println();
+        List<String> customerList = getCustomerResponse.jsonPath().get();
+        customerList.stream().forEach(customer -> {
+            System.out.println();
+        });
+
+        CustomerDto customerDto = new ObjectMapper().readValue(getCustomerResponse.getBody().asString(), CustomerDto.class);
+
+
     }
 }

@@ -1,35 +1,35 @@
 package com.copsapitest.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 @Data
-@Entity
-@Table(name = "customers")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "customerId",
+        "customerName",
+        "contactName",
+        "address",
+        "city",
+        "postalCode",
+        "country"
+})
 public class CustomerDto {
-    @Id
-    @Column(name="customer_id")
+
+    @JsonProperty("customer_id")
     private int customerId;
-
-    @Column(name="customer_name")
+    @JsonProperty("customer_name")
     private String customerName;
-
-    @Column(name="contact_name")
+    @JsonProperty("contact_name")
     private String contactName;
-
-    @Column(name="address")
+    @JsonProperty("address")
     private String address;
-
-    @Column(name="city")
+    @JsonProperty("city")
     private String city;
-
-    @Column(name="postal_code")
+    @JsonProperty("postal_code")
     private String postalCode;
-
-    @Column(name="country")
+    @JsonProperty("country")
     private String country;
 }

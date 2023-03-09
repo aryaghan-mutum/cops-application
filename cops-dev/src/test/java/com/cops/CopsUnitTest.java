@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
-public class HRTest {
+public class CopsUnitTest {
 
     @BeforeEach
     public void setup() {

@@ -1,6 +1,5 @@
 package com.copsapitest.util;
 
-import com.copsapitest.dto.CustomerDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wnameless.json.flattener.JsonFlattener;
 import lombok.SneakyThrows;
@@ -16,10 +15,15 @@ public class ServiceUtil {
         return JsonFlattener.flattenAsMap(response.get("response").toString());
     }
 
+    @Description("flatten a json string")
+    public static Map<String, Object> flattenJson(String response) {
+        return JsonFlattener.flattenAsMap(response);
+    }
+
     @SneakyThrows
-    public static String convertPojoToJson(CustomerDto customerDto) {
+    public static String convertPojoToJson(Object objectDto) {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(customerDto);
+        return mapper.writeValueAsString(objectDto);
     }
 
     public static String generateAuthToken() {
