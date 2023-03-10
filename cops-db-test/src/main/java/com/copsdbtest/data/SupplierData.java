@@ -14,7 +14,7 @@ public class SupplierData {
     public SupplierDto createSupplierData() {
         log.info("createSupplierData::createSupplierData");
         SupplierDto supplierDto = new SupplierDto();
-        supplierDto.setSupplierId(faker.number().numberBetween(1, 99));
+        supplierDto.setSupplierId(faker.number().numberBetween(10000, 99999));
         supplierDto.setSupplierName(faker.company().name());
         supplierDto.setContactName(faker.name().fullName());
         supplierDto.setAddress(faker.address().fullAddress());

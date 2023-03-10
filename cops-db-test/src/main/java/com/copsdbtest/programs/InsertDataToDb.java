@@ -17,12 +17,12 @@ import java.util.List;
 @Slf4j
 public class InsertDataToDb {
 
-    private static final int TOTAL_ROWS_TO_BE_INSERTED = 10;
+    private static final int TOTAL_ROWS_TO_BE_INSERTED = 50;
     public static final String TABLE_NAME = DbConstants.SUPPLIER_DB;
 
     public static void main(String[] args) {
       //  addDataToTable(TABLE_NAME);
-        addDataToTables();
+        addDataToAllTables();
     }
 
     @Description("add rows to table based on table")
@@ -39,7 +39,7 @@ public class InsertDataToDb {
     }
 
     @Description("add rows to all the tables")
-    private static void addDataToTables() {
+    private static void addDataToAllTables() {
         new CustomerDbService().insertMultipleCustomers(TOTAL_ROWS_TO_BE_INSERTED);
         new OrderDbService().insertMultipleOrders(TOTAL_ROWS_TO_BE_INSERTED);
         new ProductDbService().insertMultipleProducts(TOTAL_ROWS_TO_BE_INSERTED);
