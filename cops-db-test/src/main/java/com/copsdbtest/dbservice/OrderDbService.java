@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Description;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 @Slf4j
@@ -27,7 +28,7 @@ public class OrderDbService {
         List<OrderDto> orderDtoList = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(DbConstants.DB_URL, DbConstants.DB_USER, DbConstants.DB_PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(QueryConstants.SELECT_ALL_ORDERS)) {;
-            System.out.println(preparedStatement);
+            log.info(preparedStatement.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int order_id = resultSet.getInt("order_id");
@@ -93,13 +94,17 @@ public class OrderDbService {
     public List<OrderDto> insertMultipleOrders(int ordersCount) {
         log.info("OrderDb::insertMultipleOrders");
         List<OrderDto> orderDbList = new ArrayList<>();
+        AtomicInteger count = new AtomicInteger();
         IntStream.rangeClosed(1, ordersCount).forEach(order -> {
             OrderData orderData = new OrderData();
             OrderDto orderDto = orderData.createOrderData();
             insertOrder(orderDto);
             orderDbList.add(orderDto);
-            log.info("----------------------------------");
+            count.getAndIncrement();
         });
+        log.info("---------------------------------------------------");
+        log.info(String.format("Total Rows Inserted: %s in Orders Table", count.get()));
+        log.info("---------------------------------------------------");
         return orderDbList;
     }
 
@@ -147,5 +152,17 @@ public class OrderDbService {
             }
         }
         return isOrderIdPresent;
+    }
+
+    @Description("delete all orders in db")
+    public void deleteAllOrders() {
+        log.info("OrderDb::deleteAllOrders");
+        try (Connection connection = DriverManager.getConnection(DbConstants.DB_URL, DbConstants.DB_USER, DbConstants.DB_PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(QueryConstants.DELETE_ALL_ORDERS)) {
+            log.info(preparedStatement.toString());
+            log.info(String.format("Total Rows Deleted: %s in Orders Table", preparedStatement.executeUpdate()));
+        } catch (SQLException e) {
+            ConfigDbService.printSQLException(e);
+        }
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Description;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 @Slf4j
@@ -72,7 +73,7 @@ public class ProductDbService {
     public List<ProductDto> insertProduct(ProductDto productDto) {
         log.info("ProductDb::insertProduct");
         log.info(productDto.toString());
-        List<ProductDto> productDbList = new ArrayList<>();
+        List<ProductDto> productDtoList = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(DbConstants.DB_URL, DbConstants.DB_USER, DbConstants.DB_PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(QueryConstants.INSERT_PRODUCT)) {
             System.out.println(preparedStatement);
@@ -82,25 +83,29 @@ public class ProductDbService {
             preparedStatement.setInt(4, productDto.getCategoryId());
             preparedStatement.setString(5, productDto.getUnit());
             preparedStatement.setDouble(6, productDto.getPrice());
-            productDbList.add(productDto);
+            productDtoList.add(productDto);
             log.info(String.format("Total Rows Inserted: %s for product_id: %s", preparedStatement.executeUpdate(), productDto.getProductId()));
         } catch (SQLException e) {
             ConfigDbService.printSQLException(e);
         }
-        return productDbList;
+        return productDtoList;
     }
 
     @Description("insert multiple products to db")
     public List<ProductDto> insertMultipleProducts(int productsCount) {
         log.info("ProductDb::insertMultipleProducts");
         List<ProductDto> productDbList = new ArrayList<>();
+        AtomicInteger count = new AtomicInteger();
         IntStream.rangeClosed(1, productsCount).forEach(product -> {
             ProductData productData = new ProductData();
             ProductDto productDto = productData.createProductData();
             insertProduct(productDto);
             productDbList.add(productDto);
-            log.info("----------------------------------");
+            count.getAndIncrement();
         });
+        log.info("---------------------------------------------------");
+        log.info(String.format("Total Rows Inserted: %s in Products Table", count.get()));
+        log.info("---------------------------------------------------");
         return productDbList;
     }
 
@@ -148,5 +153,17 @@ public class ProductDbService {
             }
         }
         return isProductIdPresent;
+    }
+
+    @Description("delete all products in db")
+    public void deleteAllProducts() {
+        log.info("ProductDb::deleteAllProducts");
+        try (Connection connection = DriverManager.getConnection(DbConstants.DB_URL, DbConstants.DB_USER, DbConstants.DB_PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(QueryConstants.DELETE_ALL_PRODUCTS)) {
+            log.info(preparedStatement.toString());
+            log.info(String.format("Total Rows Deleted: %s in Products Table", preparedStatement.executeUpdate()));
+        } catch (SQLException e) {
+            ConfigDbService.printSQLException(e);
+        }
     }
 }
