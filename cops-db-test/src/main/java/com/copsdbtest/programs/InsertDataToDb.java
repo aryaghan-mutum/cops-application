@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class InsertDataToDb {
 
-    private static final int TOTAL_ROWS_TO_BE_INSERTED = 50;
+    private static final int TOTAL_ROWS_TO_BE_INSERTED = 10;
     public static final String TABLE_NAME = DbConstants.SUPPLIER_DB;
 
     public static void main(String[] args) {

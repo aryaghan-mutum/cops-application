@@ -15,7 +15,14 @@ Method Annotations -> Spring Framework and Lombok
 - `mvn jacoco:report`
 - go to `target/site/jacoco/index.html`
 
-#### How to generate unit test reports
+#### How to generate test reports
+
+#### How to generate Contract test
+- the client will use a mock provider
+- the provider will use a mock client
+- Effectively, the tests are done against the contract.
+
+The @PactTestFor annotation takes care of starting the HTTP service, and can be put either on the test class, or on the test method.
 
 #### Code coverage
 
