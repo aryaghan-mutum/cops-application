@@ -2,8 +2,6 @@ package com.cops.contract;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
-import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
-import au.com.dius.pact.provider.junitsupport.loader.PactBrokerAuth;
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 import au.com.dius.pact.provider.junitsupport.target.Target;
 import au.com.dius.pact.provider.junitsupport.target.TestTarget;
@@ -14,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @RunWith(SpringRestPactRunner.class)
 @Provider("customer_provider")
-@PactFolder("/tmp/pacts")
+@PactFolder("C:/dev/my-projects/app/cops-application/pacts")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ContractTest {
 

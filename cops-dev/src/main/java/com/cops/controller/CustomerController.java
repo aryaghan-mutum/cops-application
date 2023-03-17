@@ -16,9 +16,9 @@ public class CustomerController {
     @Autowired
     CustomerDB customerDB;
 
-    @GetMapping("/{customerId}")
-    public CustomerModel getCustomer(@PathVariable String customerId) {
-        log.info("CustomerController::getCustomersList" + customerId);
+    @GetMapping("/getCustomerById/{customerId}")
+    public CustomerModel getCustomerById(@PathVariable String customerId) {
+        log.info("CustomerController::getCustomerById" + customerId);
         return customerDB.findById(customerId).get();
     }
 

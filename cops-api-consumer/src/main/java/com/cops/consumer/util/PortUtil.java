@@ -1,15 +1,15 @@
-package com.cops.api.apitest;
+package com.cops.consumer.util;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 
-public class RandomPort {
+public class PortUtil {
 
-    private static RandomPort INSTANCE;
+    private static PortUtil INSTANCE;
 
     private int port;
 
-    private RandomPort() {
+    private PortUtil() {
         try (ServerSocket serverSocket = new ServerSocket(0)) {
             this.port = serverSocket.getLocalPort();
             System.setProperty("RANDOM_PORT", String.valueOf(this.port));
@@ -18,9 +18,9 @@ public class RandomPort {
         }
     }
 
-    public static RandomPort getInstance() {
+    public static PortUtil getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new RandomPort();
+            INSTANCE = new PortUtil();
         }
         return INSTANCE;
     }
