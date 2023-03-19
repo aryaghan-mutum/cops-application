@@ -18,7 +18,7 @@ public class CustomerController {
 
     @GetMapping("/getCustomerById/{customerId}")
     public CustomerModel getCustomerById(@PathVariable String customerId) {
-        log.info("CustomerController::getCustomerById" + customerId);
+        log.info("CustomerController::getCustomerById:" + customerId);
         return customerDB.findById(customerId).get();
     }
 

@@ -1,18 +1,18 @@
 {
   "consumer": {
-    "name": "customer_consumer"
+    "name": "customer_consumer_get_api_500_internal_server_error"
   },
   "interactions": [
     {
-      "description": "A request for customer data",
+      "description": "500 Internal Server Error",
       "providerStates": [
         {
-          "name": "Customer GET: the customer ID matches an existing customer"
+          "name": "Customer GET: Invalid customerId"
         }
       ],
       "request": {
         "method": "GET",
-        "path": "/customer/getCustomerById/c001"
+        "path": "/customer/getCustomerById/c002"
       },
       "response": {
         "body": {
@@ -20,7 +20,7 @@
           "city": "blr",
           "contactName": "contact1",
           "country": "IN",
-          "customerId": "c001",
+          "customerId": "c002",
           "customerName": "customer1",
           "postalCode": "560077"
         },
@@ -98,7 +98,7 @@
             }
           }
         },
-        "status": 200
+        "status": 500
       }
     }
   ],

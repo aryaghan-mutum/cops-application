@@ -1,5 +1,7 @@
-HELP.md
+### Maven ###
+.mvn
 target/
+log/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -12,6 +14,11 @@ target/
 .settings
 .springBeans
 .sts4-cache
+
+### Allure ###
+allure-results
+/allure-results
+.allure
 
 ### IntelliJ IDEA ###
 .idea
@@ -31,3 +38,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+#### Eclipse
+.settings/
+
+### Mac ###
+.DS_Store
+

@@ -23,6 +23,12 @@ public class ContractTest {
 
     @State("Customer GET: the customer ID matches an existing customer")
     public void customerSuppliedByCustomerGETExists() {
+        System.out.println("ContractTest::customerSuppliedByCustomerGETExists");
     }
+
+//    @State("Customer GET: the customer ID matches an existing customer invalid")
+//    public void customerSuppliedByCustomerGETExistsInvalid() {
+//        System.out.println("ContractTest::customerSuppliedByCustomerGETExistsInvalid");
+//    }
 
 }
