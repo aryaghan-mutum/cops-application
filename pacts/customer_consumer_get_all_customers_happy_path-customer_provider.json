@@ -1,18 +1,18 @@
 {
   "consumer": {
-    "name": "customer_consumer"
+    "name": "customer_consumer_get_all_customers_happy_path"
   },
   "interactions": [
     {
-      "description": "A request for customer data",
+      "description": "get all customers",
       "providerStates": [
         {
-          "name": "Customer GET: the customer ID matches an existing customer"
+          "name": "customer exist"
         }
       ],
       "request": {
         "method": "GET",
-        "path": "/customer/getCustomerById/c001"
+        "path": "/customer/getCustomersList"
       },
       "response": {
         "body": {
