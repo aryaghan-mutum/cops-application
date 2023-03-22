@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +37,6 @@ public class CustomerServiceGetCustomersListHappyPath {
 
     @Autowired
     private CustomerServiceClient customerServiceClient;
-
 
     private CustomerModel customerModel;
 
@@ -63,12 +63,10 @@ public class CustomerServiceGetCustomersListHappyPath {
                 .stringType("country", customerModel.getCountry())
         ).build();
 
-        final String PATH = String.format("/customer/getCustomerById/%s", customerModel.getCustomerId());
-
         RequestResponsePact requestResponsePact = builder
                 .given("customer exist")
                 .uponReceiving("get all customers")
-                .path(PATH)
+                .path("/customer/getCustomersList")
                 .method(HttpMethod.GET.name())
                 .willRespondWith()
                 .status(HttpStatus.OK.value())
@@ -79,18 +77,18 @@ public class CustomerServiceGetCustomersListHappyPath {
 
     @PactVerification(fragment = "pactForGetAllCustomers")
     @Test
-    public void testFor_GET_existingCustomerId_getCustomersList() {
-        log.info("CustomerServiceGetPositiveTest::testFor_GET_existingCustomerId_getCustomersList");
-        final CustomerModel customerResponse = customerServiceClient.getCustomer(customerModel.getCustomerId());
+    public void getCustomersListHappyPath() {
+        log.info("CustomerServiceGetPositiveTest::getCustomersListHappyPath");
+        ResponseEntity<CustomerModel> customerResponse = customerServiceClient.getCustomersList();
         log.info("Customer Response: ");
-        log.info(String.valueOf(customerResponse));
-        assertThat(customerResponse.getCustomerId()).isEqualTo(customerModel.getCustomerId());
-        assertThat(customerResponse.getCustomerName()).isEqualTo(customerModel.getCustomerName());
-        assertThat(customerResponse.getContactName()).isEqualTo(customerModel.getContactName());
-        assertThat(customerResponse.getAddress()).isEqualTo(customerModel.getAddress());
-        assertThat(customerResponse.getCity()).isEqualTo(customerModel.getCity());
-        assertThat(customerResponse.getPostalCode()).isEqualTo(customerModel.getPostalCode());
-        assertThat(customerResponse.getCountry()).isEqualTo(customerModel.getCountry());
+        log.info(String.valueOf(customerResponse.getBody()));
+        assertThat(customerResponse.getBody().getCustomerId()).isEqualTo(customerModel.getCustomerId());
+        assertThat(customerResponse.getBody().getCustomerName()).isEqualTo(customerModel.getCustomerName());
+        assertThat(customerResponse.getBody().getContactName()).isEqualTo(customerModel.getContactName());
+        assertThat(customerResponse.getBody().getAddress()).isEqualTo(customerModel.getAddress());
+        assertThat(customerResponse.getBody().getCity()).isEqualTo(customerModel.getCity());
+        assertThat(customerResponse.getBody().getPostalCode()).isEqualTo(customerModel.getPostalCode());
+        assertThat(customerResponse.getBody().getCountry()).isEqualTo(customerModel.getCountry());
     }
 
 }

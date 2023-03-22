@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.cops.consumer.model.CustomerModel;
 
@@ -78,17 +79,19 @@ public class CustomerServiceGetCustomerByIdHappyPath {
 
     @PactVerification(fragment = "pactForGetCustomer")
     @Test
-    public void testFor_GET_existing_GetCustomerById() {
-        log.info("CustomerServiceGetPositiveTest::testFor_GET_existingGetCustomerById");
-        final CustomerModel customerResponse = customerServiceClient.getCustomer(customerModel.getCustomerId());
+    public void getCustomerByIdHappyPath() {
+        log.info("CustomerServiceGetPositiveTest::getCustomerByIdHappyPath");
+        ResponseEntity<CustomerModel> customerResponse = customerServiceClient.getCustomerById(customerModel.getCustomerId());
         log.info("Customer Response: ");
-        log.info(String.valueOf(customerResponse));
-        assertThat(customerResponse.getCustomerId()).isEqualTo(customerModel.getCustomerId());
-        assertThat(customerResponse.getCustomerName()).isEqualTo(customerModel.getCustomerName());
-        assertThat(customerResponse.getContactName()).isEqualTo(customerModel.getContactName());
-        assertThat(customerResponse.getAddress()).isEqualTo(customerModel.getAddress());
-        assertThat(customerResponse.getCity()).isEqualTo(customerModel.getCity());
-        assertThat(customerResponse.getPostalCode()).isEqualTo(customerModel.getPostalCode());
-        assertThat(customerResponse.getCountry()).isEqualTo(customerModel.getCountry());
+        log.info(String.valueOf(customerResponse.getBody()));
+        assertThat(customerResponse.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
+        assertThat(customerResponse.getStatusCode().getReasonPhrase()).isEqualTo(HttpStatus.OK.getReasonPhrase());
+        assertThat(customerResponse.getBody().getCustomerId()).isEqualTo(customerModel.getCustomerId());
+        assertThat(customerResponse.getBody().getCustomerName()).isEqualTo(customerModel.getCustomerName());
+        assertThat(customerResponse.getBody().getContactName()).isEqualTo(customerModel.getContactName());
+        assertThat(customerResponse.getBody().getAddress()).isEqualTo(customerModel.getAddress());
+        assertThat(customerResponse.getBody().getCity()).isEqualTo(customerModel.getCity());
+        assertThat(customerResponse.getBody().getPostalCode()).isEqualTo(customerModel.getPostalCode());
+        assertThat(customerResponse.getBody().getCountry()).isEqualTo(customerModel.getCountry());
     }
 }

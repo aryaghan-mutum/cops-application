@@ -12,7 +12,7 @@
       ],
       "request": {
         "method": "GET",
-        "path": "/customer/getCustomerById/c001"
+        "path": "/customer/getCustomersList"
       },
       "response": {
         "body": {

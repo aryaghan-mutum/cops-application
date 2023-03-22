@@ -2,11 +2,20 @@ package com.cops.controller;
 
 import com.cops.db.CustomerDB;
 import com.cops.model.CustomerModel;
+import com.cops.util.ServiceUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+
+import static java.util.Objects.isNull;
+import static org.springframework.http.ResponseEntity.*;
+import static org.springframework.http.ResponseEntity.notFound;
 
 @Slf4j
 @RestController
@@ -16,33 +25,41 @@ public class CustomerController {
     @Autowired
     CustomerDB customerDB;
 
-    @GetMapping("/getCustomerById/{customerId}")
-    public CustomerModel getCustomerById(@PathVariable String customerId) {
+    @GetMapping(value = "/getCustomerById/{customerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CustomerModel> getCustomerById(@PathVariable String customerId) {
         log.info("CustomerController::getCustomerById:" + customerId);
-        return customerDB.findById(customerId).get();
+        try {
+            CustomerModel customer = customerDB.findById(customerId).get();
+            return ok().headers(ServiceUtil.getHeaders()).body(customer);
+        } catch (NoSuchElementException e) {
+            return notFound().build();
+        }
     }
 
-    @GetMapping("/getCustomersList")
-    public List<CustomerModel> getCustomersList() {
+    @GetMapping(value = "/getCustomersList", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<CustomerModel>> getCustomersList() {
         log.info("CustomerController::getCustomersList");
-        return customerDB.findAll();
+        List<CustomerModel> customersList = customerDB.findAll();
+        return ResponseEntity.ok().headers(ServiceUtil.getHeaders()).body(customersList);
     }
 
-    @PostMapping("/addCustomer")
-    public void addCustomer(@RequestBody CustomerModel customerModel) {
+    @PostMapping(value = "/addCustomer", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CustomerModel addCustomer(@RequestBody CustomerModel customerModel) {
         log.info("CustomerController::addCustomer");
-        customerDB.save(customerModel);
+        CustomerModel saveCustomer = customerDB.save(customerModel);
+        return ResponseEntity.ok().headers(ServiceUtil.getHeaders()).body(saveCustomer).getBody();
     }
 
-    @DeleteMapping("/deleteCustomer")
+    @DeleteMapping(value = "/deleteCustomer", produces = MediaType.APPLICATION_JSON_VALUE)
     public void deleteCustomer(@RequestBody CustomerModel customerModel) {
         log.info("CustomerController::deleteCustomer");
         customerDB.delete(customerModel);
     }
 
-    @PutMapping("/updateCustomer")
-    public void updateCustomer(@RequestBody CustomerModel customerModel) {
+    @PutMapping(value = "/updateCustomer", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CustomerModel updateCustomer(@RequestBody CustomerModel customerModel) {
         log.info("CustomerController::updateCustomer");
-        customerDB.save(customerModel);
+        CustomerModel updateCustomer = customerDB.save(customerModel);
+        return ResponseEntity.ok().headers(ServiceUtil.getHeaders()).body(updateCustomer).getBody();
     }
 }

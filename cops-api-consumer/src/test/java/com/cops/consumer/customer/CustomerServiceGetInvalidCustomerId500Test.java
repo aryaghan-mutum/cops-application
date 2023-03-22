@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -79,16 +80,13 @@ public class CustomerServiceGetInvalidCustomerId500Test {
         return requestResponsePact;
     }
 
-    @PactVerification(fragment = "pactForGetCustomer")
     @Test
-    public void testFor_GET_NoCustomerId() {
-        final CustomerModel customerResponse = customerServiceClient.getCustomer(customerModel.getCustomerId());
-        assertNull(customerResponse.getCustomerId());
-        assertNull(customerResponse.getCustomerName());
-        assertNull(customerResponse.getContactName());
-        assertNull(customerResponse.getAddress());
-        assertNull(customerResponse.getCity());
-        assertNull(customerResponse.getPostalCode());
-        assertNull(customerResponse.getCountry());
+    @PactVerification(fragment = "pactForGetCustomer")
+    public void getCustomerByIdWhenCustomerIdIsNotPresentInDb() {
+        log.info("CustomerServiceGetInvalidCustomerId404Test::getCustomerByIdWhenCustomerIdIsNotPresentInDb");
+        ResponseEntity<CustomerModel> customerResponse = customerServiceClient.getCustomerById(customerModel.getCustomerId());
+        assertThat(customerResponse.getStatusCodeValue()).isEqualTo(HttpStatus.NOT_FOUND.value());
+        assertThat(customerResponse.getStatusCode().getReasonPhrase()).isEqualTo(HttpStatus.NOT_FOUND.getReasonPhrase());
+        assertNull(customerResponse.getBody());
     }
 }
