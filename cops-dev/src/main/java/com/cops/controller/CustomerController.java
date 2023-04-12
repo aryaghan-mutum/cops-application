@@ -5,7 +5,6 @@ import com.cops.model.CustomerModel;
 import com.cops.util.ServiceUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static java.util.Objects.isNull;
 import static org.springframework.http.ResponseEntity.*;
 import static org.springframework.http.ResponseEntity.notFound;
 
@@ -47,19 +45,23 @@ public class CustomerController {
     public CustomerModel addCustomer(@RequestBody CustomerModel customerModel) {
         log.info("CustomerController::addCustomer");
         CustomerModel saveCustomer = customerDB.save(customerModel);
+        log.info("Customer Added: " + customerModel);
         return ResponseEntity.ok().headers(ServiceUtil.getHeaders()).body(saveCustomer).getBody();
     }
 
     @DeleteMapping(value = "/deleteCustomer", produces = MediaType.APPLICATION_JSON_VALUE)
     public void deleteCustomer(@RequestBody CustomerModel customerModel) {
         log.info("CustomerController::deleteCustomer");
+        ResponseEntity.ok().headers(ServiceUtil.getHeaders()).build();
         customerDB.delete(customerModel);
+        log.info("Customer Deleted: " + customerModel);
     }
 
     @PutMapping(value = "/updateCustomer", produces = MediaType.APPLICATION_JSON_VALUE)
     public CustomerModel updateCustomer(@RequestBody CustomerModel customerModel) {
         log.info("CustomerController::updateCustomer");
         CustomerModel updateCustomer = customerDB.save(customerModel);
+        log.info("Customer Updated: " + customerModel);
         return ResponseEntity.ok().headers(ServiceUtil.getHeaders()).body(updateCustomer).getBody();
     }
 }

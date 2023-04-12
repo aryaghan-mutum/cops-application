@@ -12,7 +12,7 @@
       ],
       "request": {
         "method": "GET",
-        "path": "/customer/getCustomerById/c001"
+        "path": "/customer/getCustomerById/"
       },
       "response": {
         "body": {
@@ -20,7 +20,7 @@
           "city": "blr",
           "contactName": "contact1",
           "country": "IN",
-          "customerId": "c001",
+          "customerId": "",
           "customerName": "customer1",
           "postalCode": "560077"
         },
