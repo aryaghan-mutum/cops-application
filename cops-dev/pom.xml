@@ -25,6 +25,7 @@
         <pact.version>4.2.7</pact.version>
         <pact.maven.plugin.version>4.0.10</pact.maven.plugin.version>
         <lombok.version>1.18.20</lombok.version>
+        <swagger.version>3.0.0</swagger.version>
     </properties>
 
     <dependencies>
@@ -54,6 +55,16 @@
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -115,35 +126,30 @@
             <version>5.4.0</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>au.com.dius.pact</groupId>
             <artifactId>provider</artifactId>
             <version>${pact.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>au.com.dius.pact.provider</groupId>
             <artifactId>junit</artifactId>
             <version>${pact.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>au.com.dius.pact.provider</groupId>
             <artifactId>spring</artifactId>
             <version>${pact.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

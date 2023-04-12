@@ -25,20 +25,4 @@ public class ContractTest {
     public void customerSuppliedByCustomerGETExists() {
         System.out.println("ContractTest::customerSuppliedByCustomerGETExists");
     }
-
-    @State("Customer GET: test2")
-    public void test2() {
-        System.out.println("ContractTest::test2");
-    }
-
-    @State("Customer GET: test3")
-    public void test3() {
-        System.out.println("ContractTest::test3");
-    }
-
-    @State("Customer GET: test4")
-    public void test4() {
-        System.out.println("ContractTest::test4");
-    }
-
 }
